@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // Инициализация при загрузке страницы
 document.addEventListener('DOMContentLoaded', function () {
     console.log('DOM загружен, инициализируем аудио...');
-    
+
     // Проверяем загрузку аудио
     audio.addEventListener('canplaythrough', function () {
         console.log('Аудио загружено успешно');
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Пытаемся запустить музыку при первом взаимодействии пользователя
     setupAutoPlayOnInteraction();
-    
+
     // Дополнительная попытка автовоспроизведения через 2 секунды
     setTimeout(() => {
         if (!isPlaying) {
@@ -599,11 +599,11 @@ document.head.appendChild(notificationStyle);
 // Настройка автовоспроизведения при взаимодействии
 function setupAutoPlayOnInteraction() {
     let hasTriedAutoPlay = false;
-    
+
     function tryAutoPlay() {
         if (hasTriedAutoPlay) return;
         hasTriedAutoPlay = true;
-        
+
         console.log('Попытка автовоспроизведения при взаимодействии...');
         // Убираем muted для воспроизведения
         audio.muted = false;
@@ -615,7 +615,7 @@ function setupAutoPlayOnInteraction() {
             console.log('Не удалось запустить музыку автоматически:', e);
         });
     }
-    
+
     // Слушаем различные события взаимодействия
     const events = ['click', 'touchstart', 'keydown', 'scroll'];
     events.forEach(event => {
