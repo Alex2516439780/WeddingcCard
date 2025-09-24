@@ -37,12 +37,14 @@ document.addEventListener('DOMContentLoaded', function() {
         // Попытка автовоспроизведения (может не работать в некоторых браузерах)
         audio.play().catch(e => {
             console.log('Автовоспроизведение заблокировано браузером');
+            // Показываем уведомление о том, что нужно кликнуть для воспроизведения
+            showMusicNotification();
         });
     });
 
     audio.addEventListener('error', function(e) {
         console.error('Ошибка загрузки аудио:', e);
-        alert('Ошибка загрузки музыки. Проверьте, что файл "Eugen Doga Waltz.mp3" находится в папке с сайтом.');
+        alert('Ошибка загрузки музыки. Проверьте, что файл "Empire of the Sun – We Are The People (Original Mix).mp3" находится в папке с сайтом.');
     });
 
     // Добавляем эффекты при загрузке
@@ -50,6 +52,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Инициализируем анимации
     initAnimations();
+    
+    // Пытаемся запустить музыку при первом взаимодействии пользователя
+    setupAutoPlayOnInteraction();
 });
 
 // Управление воспроизведением музыки
@@ -59,6 +64,8 @@ playPauseBtn.addEventListener('click', function() {
         playPauseBtn.textContent = '🎵';
         isPlaying = false;
     } else {
+        // Убираем muted для воспроизведения
+        audio.muted = false;
         audio.play().then(() => {
             playPauseBtn.textContent = '⏸️';
             isPlaying = true;
@@ -506,3 +513,87 @@ document.head.appendChild(twinkleStyle);
 
 // Добавляем эффект мерцания
 setTimeout(addTwinkleEffect, 3000);
+
+// Функция для показа уведомления о музыке
+function showMusicNotification() {
+    const notification = document.createElement('div');
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.9);
+        color: white;
+        padding: 15px 25px;
+        border-radius: 25px;
+        border: 2px solid #ffffff;
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1.1rem;
+        z-index: 10000;
+        backdrop-filter: blur(10px);
+        box-shadow: 0 10px 30px rgba(255, 255, 255, 0.3);
+        animation: slideDown 0.5s ease-out;
+    `;
+    notification.innerHTML = '🎵 Нажмите в любом месте для воспроизведения музыки';
+    
+    document.body.appendChild(notification);
+    
+    // Убираем уведомление через 5 секунд
+    setTimeout(() => {
+        notification.style.animation = 'slideUp 0.5s ease-out forwards';
+        setTimeout(() => notification.remove(), 500);
+    }, 5000);
+}
+
+// CSS анимации для уведомления
+const notificationStyle = document.createElement('style');
+notificationStyle.textContent = `
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateX(-50%) translateY(-50px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    }
+    
+    @keyframes slideUp {
+        from {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+        to {
+            opacity: 0;
+            transform: translateX(-50%) translateY(-50px);
+        }
+    }
+`;
+document.head.appendChild(notificationStyle);
+
+// Настройка автовоспроизведения при взаимодействии
+function setupAutoPlayOnInteraction() {
+    let hasTriedAutoPlay = false;
+    
+    function tryAutoPlay() {
+        if (hasTriedAutoPlay) return;
+        hasTriedAutoPlay = true;
+        
+        // Убираем muted для воспроизведения
+        audio.muted = false;
+        audio.play().then(() => {
+            playPauseBtn.textContent = '⏸️';
+            isPlaying = true;
+            console.log('Музыка запущена автоматически при взаимодействии');
+        }).catch(e => {
+            console.log('Не удалось запустить музыку автоматически:', e);
+        });
+    }
+    
+    // Слушаем различные события взаимодействия
+    const events = ['click', 'touchstart', 'keydown', 'scroll'];
+    events.forEach(event => {
+        document.addEventListener(event, tryAutoPlay, { once: true });
+    });
+}
