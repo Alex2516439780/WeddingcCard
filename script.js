@@ -30,19 +30,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 // Инициализация при загрузке страницы
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
+    console.log('DOM загружен, инициализируем аудио...');
+    
     // Проверяем загрузку аудио
-    audio.addEventListener('canplaythrough', function() {
+    audio.addEventListener('canplaythrough', function () {
         console.log('Аудио загружено успешно');
+        // Убираем muted для попытки автовоспроизведения
+        audio.muted = false;
+        console.log('Пытаемся запустить автовоспроизведение...');
         // Попытка автовоспроизведения (может не работать в некоторых браузерах)
-        audio.play().catch(e => {
-            console.log('Автовоспроизведение заблокировано браузером');
+        audio.play().then(() => {
+            console.log('Автовоспроизведение успешно запущено');
+            playPauseBtn.textContent = '⏸️';
+            isPlaying = true;
+        }).catch(e => {
+            console.log('Автовоспроизведение заблокировано браузером:', e);
             // Показываем уведомление о том, что нужно кликнуть для воспроизведения
             showMusicNotification();
         });
     });
 
-    audio.addEventListener('error', function(e) {
+    audio.addEventListener('error', function (e) {
         console.error('Ошибка загрузки аудио:', e);
         alert('Ошибка загрузки музыки. Проверьте, что файл "Empire of the Sun – We Are The People (Original Mix).mp3" находится в папке с сайтом.');
     });
@@ -52,13 +61,28 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Инициализируем анимации
     initAnimations();
-    
+
     // Пытаемся запустить музыку при первом взаимодействии пользователя
     setupAutoPlayOnInteraction();
+    
+    // Дополнительная попытка автовоспроизведения через 2 секунды
+    setTimeout(() => {
+        if (!isPlaying) {
+            console.log('Попытка автовоспроизведения через 2 секунды...');
+            audio.muted = false;
+            audio.play().then(() => {
+                playPauseBtn.textContent = '⏸️';
+                isPlaying = true;
+                console.log('Музыка запущена через 2 секунды');
+            }).catch(e => {
+                console.log('Не удалось запустить музыку через 2 секунды:', e);
+            });
+        }
+    }, 2000);
 });
 
 // Управление воспроизведением музыки
-playPauseBtn.addEventListener('click', function() {
+playPauseBtn.addEventListener('click', function () {
     if (isPlaying) {
         audio.pause();
         playPauseBtn.textContent = '🎵';
@@ -88,7 +112,7 @@ function handlePhotoChange(event) {
     const file = event.target.files[0];
     if (file) {
         const reader = new FileReader();
-        reader.onload = function(e) {
+        reader.onload = function (e) {
             const targetId = 'couplePhoto';
             const img = document.getElementById(targetId);
 
@@ -137,7 +161,7 @@ function toggleRules() {
 }
 
 // Закрытие модального окна при клике вне его
-window.addEventListener('click', function(event) {
+window.addEventListener('click', function (event) {
     const modal = document.getElementById('rulesModal');
     if (event.target === modal) {
         toggleRules();
@@ -231,47 +255,47 @@ function submitRSVP(event) {
         },
         body: JSON.stringify(telegramData)
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.ok) {
-            // Успешная отправка в Telegram
-            const rsvpMessage = document.getElementById('rsvpMessage');
-            const buttons = document.querySelectorAll('.rsvp-btn');
+        .then(response => response.json())
+        .then(data => {
+            if (data.ok) {
+                // Успешная отправка в Telegram
+                const rsvpMessage = document.getElementById('rsvpMessage');
+                const buttons = document.querySelectorAll('.rsvp-btn');
 
-            buttons.forEach(btn => btn.classList.remove('active'));
+                buttons.forEach(btn => btn.classList.remove('active'));
 
-            if (rsvpType === 'confirmed') {
-                rsvpMessage.textContent = '🎉 Отлично! Мы очень рады, что вы будете с нами!';
-                rsvpMessage.style.color = '#4CAF50';
-                buttons[0].classList.add('active');
+                if (rsvpType === 'confirmed') {
+                    rsvpMessage.textContent = '🎉 Отлично! Мы очень рады, что вы будете с нами!';
+                    rsvpMessage.style.color = '#4CAF50';
+                    buttons[0].classList.add('active');
+                } else {
+                    rsvpMessage.textContent = '😢 Очень жаль, что вы не сможете быть с нами. Будем скучать!';
+                    rsvpMessage.style.color = '#f44336';
+                    buttons[1].classList.add('active');
+                }
+
+                formMessage.textContent = 'Сообщение успешно отправлено в Telegram!';
+                formMessage.className = 'success';
+
+                // Закрываем форму немедленно
+                closeRSVPForm();
+
+                // Запускаем анимацию конфетти
+                addConfettiOnConfirm();
+
             } else {
-                rsvpMessage.textContent = '😢 Очень жаль, что вы не сможете быть с нами. Будем скучать!';
-                rsvpMessage.style.color = '#f44336';
-                buttons[1].classList.add('active');
+                throw new Error(data.description || 'Ошибка отправки в Telegram');
             }
-
-            formMessage.textContent = 'Сообщение успешно отправлено в Telegram!';
-            formMessage.className = 'success';
-
-            // Закрываем форму немедленно
-            closeRSVPForm();
-
-            // Запускаем анимацию конфетти
-            addConfettiOnConfirm();
-
-        } else {
-            throw new Error(data.description || 'Ошибка отправки в Telegram');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        formMessage.textContent = `Ошибка отправки в Telegram: ${error.message}`;
-        formMessage.className = 'error';
-    });
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            formMessage.textContent = `Ошибка отправки в Telegram: ${error.message}`;
+            formMessage.className = 'error';
+        });
 }
 
 // Закрытие формы при клике вне ее
-window.addEventListener('click', function(event) {
+window.addEventListener('click', function (event) {
     const modal = document.getElementById('rsvpFormModal');
     if (event.target === modal) {
         closeRSVPForm();
@@ -382,7 +406,7 @@ setTimeout(() => {
 }, 1000);
 
 // Управление клавиатурой
-document.addEventListener('keydown', function(event) {
+document.addEventListener('keydown', function (event) {
     // Пробел для воспроизведения/паузы музыки
     if (event.code === 'Space' && event.target.tagName !== 'INPUT') {
         event.preventDefault();
@@ -535,9 +559,9 @@ function showMusicNotification() {
         animation: slideDown 0.5s ease-out;
     `;
     notification.innerHTML = '🎵 Нажмите в любом месте для воспроизведения музыки';
-    
+
     document.body.appendChild(notification);
-    
+
     // Убираем уведомление через 5 секунд
     setTimeout(() => {
         notification.style.animation = 'slideUp 0.5s ease-out forwards';
@@ -558,7 +582,7 @@ notificationStyle.textContent = `
             transform: translateX(-50%) translateY(0);
         }
     }
-    
+
     @keyframes slideUp {
         from {
             opacity: 1;
@@ -580,6 +604,7 @@ function setupAutoPlayOnInteraction() {
         if (hasTriedAutoPlay) return;
         hasTriedAutoPlay = true;
         
+        console.log('Попытка автовоспроизведения при взаимодействии...');
         // Убираем muted для воспроизведения
         audio.muted = false;
         audio.play().then(() => {
