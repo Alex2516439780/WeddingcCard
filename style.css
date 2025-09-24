@@ -1,0 +1,979 @@
+/* Сброс стилей и базовые настройки */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+    will-change: auto !important;
+    overflow-x: hidden !important; /* Убедимся, что это применено и к html */
+}
+
+/* Отладка горизонтальной прокрутки: временное правило */
+/* * {
+    outline: 1px solid red !important;
+} */
+
+body {
+    font-family: 'Libre Baskerville', serif;
+    overflow-x: hidden !important; /* Принудительно скрываем горизонтальную прокрутку */
+    background: linear-gradient(135deg, #000000, #1a1a1a, #2d2d2d);
+    color: #ffffff;
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+/* Аудио контролы */
+.audio-controls {
+    position: fixed !important;
+    top: 30px !important;
+    right: 15px !important; /* Перемещено немного правее */
+    z-index: 1000 !important;
+    animation: none !important;
+    transform: none !important;
+    transition: none !important;
+    will-change: auto !important;
+    background: none !important; /* Убираем фон контейнера, если он есть */
+    box-shadow: none !important; /* Убираем тени контейнера */
+}
+
+.audio-btn {
+    background: rgba(0, 0, 0, 0.8) !important;
+    border: 2px solid #ffffff !important;
+    border-radius: 50% !important;
+    width: 55px !important;
+    height: 55px !important;
+    font-size: 22px !important;
+    cursor: pointer !important;
+    transition: none !important; /* Отключаем все переходы */
+    backdrop-filter: none !important; /* Отключаем фильтр */
+    color: #ffffff !important;
+    box-shadow: none !important; /* Убираем тени */
+    animation: none !important;
+    transform: none !important;
+    will-change: auto !important;
+    position: relative !important;
+}
+
+.audio-btn:hover {
+    background: rgba(0, 0, 0, 0.8) !important; /* Сохраняем фон при наведении как базовый */
+    transform: none !important; /* Отключаем изменение размера при наведении */
+    box-shadow: none !important; /* Отключаем тени при наведении */
+}
+
+/* Принудительное отключение всех анимаций для кнопки и ее дочерних элементов */
+.audio-controls *,
+.audio-controls *::before,
+.audio-controls *::after {
+    animation: none !important;
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+    animation-iteration-count: 1 !important;
+    animation-fill-mode: none !important;
+    animation-play-state: paused !important;
+    transform: none !important;
+    transition: none !important;
+    will-change: auto !important;
+}
+
+/* Основной контейнер */
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    position: relative;
+    z-index: 1;
+}
+
+/* Декоративный герб с инициалами */
+.crest-section {
+    text-align: center;
+    margin-bottom: 30px; /* Уменьшен отступ */
+    position: relative;
+}
+
+.crest-section::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 280px; /* Скорректировано, чтобы соответствовать мобильной версии и не выпирать */
+    height: 280px; /* Скорректировано */
+    /* background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%); */
+    border-radius: 50%;
+    animation: outerGlow 6s ease-in-out infinite alternate;
+    z-index: 0;
+}
+
+@keyframes outerGlow {
+    0% {
+        opacity: 0.3;
+        transform: translate(-50%, -50%) scale(1);
+    }
+    100% {
+        opacity: 0.6;
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+}
+
+.crest-photo {
+    position: relative !important;
+    display: inline-block !important;
+    width: 350px !important; /* Уменьшена ширина для десктопа */
+    height: 350px !important; /* Уменьшена высота для десктопа */
+    border-radius: 50px !important;
+    overflow: hidden !important;
+    animation: crestGlow 4s ease-in-out infinite alternate !important;
+    filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.5)) !important;
+    background: transparent !important;
+}
+
+.crest-photo::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    right: -20px;
+    bottom: -20px;
+    background: transparent;
+    border-radius: 60px;
+    z-index: -1;
+    animation: auraPulse 6s ease-in-out infinite;
+}
+
+.crest-photo::after {
+    content: '';
+    position: absolute;
+    top: -40px;
+    left: -40px;
+    right: -40px;
+    bottom: -40px;
+    background: transparent;
+    border-radius: 80px;
+    z-index: -2;
+    animation: auraFloat 8s ease-in-out infinite;
+}
+
+@keyframes auraPulse {
+    0%, 100% {
+        opacity: 0.3;
+    }
+    50% {
+        opacity: 0.6;
+    }
+}
+
+@keyframes auraFloat {
+    0%, 100% {
+        opacity: 0.2;
+        transform: rotate(0deg);
+    }
+    50% {
+        opacity: 0.4;
+        transform: rotate(180deg);
+    }
+}
+
+.crest-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 20px;
+    background: transparent;
+}
+
+@keyframes crestGlow {
+    0% {
+        filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.6));
+    }
+    50% {
+        filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.8));
+    }
+    100% {
+        filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.7));
+    }
+}
+
+
+
+
+
+
+
+
+/* Имена молодоженов */
+.names-section {
+    text-align: center;
+    margin-bottom: 30px; /* Уменьшен отступ */
+}
+
+.bride-name, .groom-name, .and-text {
+    font-family: 'Dancing Script', cursive; /* Изменен шрифт на рукописный */
+    font-size: 4.8rem; /* Скорректирован размер */
+    color: #ffffff;
+    text-shadow:
+        0 0 15px rgba(255, 255, 255, 1),
+        0 0 30px rgba(255, 255, 255, 0.8),
+        0 0 50px rgba(255, 255, 255, 0.6);
+    margin: 0;
+    font-weight: 700;
+    animation: nameGlow 4s ease-in-out infinite alternate;
+    letter-spacing: 2px; /* Скорректирован интервал между буквами для рукописного шрифта */
+    text-transform: capitalize; /* Изменено на заглавные только первые буквы */
+}
+
+@keyframes nameGlow {
+    0% {
+        text-shadow:
+            0 0 15px rgba(255, 255, 255, 1),
+            0 0 30px rgba(255, 255, 255, 0.8),
+            0 0 50px rgba(255, 255, 255, 0.6);
+    }
+    100% {
+        text-shadow:
+            0 0 25px rgba(255, 255, 255, 1),
+            0 0 45px rgba(255, 255, 255, 0.9),
+            0 0 70px rgba(255, 255, 255, 0.7),
+            0 0 90px rgba(255, 255, 255, 0.5);
+    }
+}
+
+.and-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    color: #ffffff;
+    margin: 0 30px;
+    font-style: italic;
+    opacity: 0.9;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+    letter-spacing: 2px;
+}
+
+/* Романтическая цитата */
+.quote-section {
+    text-align: center;
+    margin-bottom: 30px; /* Уменьшен отступ */
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s ease;
+}
+
+.quote-section:hover {
+    transform: translateY(-5px) scale(1.01);
+    box-shadow: 0 10px 30px rgba(255, 255, 255, 0.3);
+}
+
+.quote-section::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+}
+
+.romantic-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    color: #ffffff;
+    font-style: italic;
+    margin-bottom: 30px;
+    line-height: 1.5;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+    position: relative;
+    z-index: 1;
+}
+
+.date-info {
+    margin-top: 20px;
+    position: relative;
+    z-index: 1;
+}
+
+.date {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: #ffffff;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-shadow: 0 0 25px rgba(255, 255, 255, 0.8);
+}
+
+/* Информация о свадьбе */
+.wedding-info {
+    text-align: center;
+    margin-bottom: 30px; /* Уменьшен отступ */
+    transition: all 0.4s ease;
+}
+
+.wedding-info:hover {
+    transform: translateY(-5px) scale(1.01);
+    box-shadow: 0 10px 30px rgba(255, 255, 255, 0.3);
+}
+
+.venue-info {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 30px;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.4s ease;
+}
+
+.venue-info:hover {
+    transform: translateY(-5px) scale(1.01);
+    box-shadow: 0 10px 30px rgba(255, 255, 255, 0.3);
+}
+
+.venue-name {
+    font-family: 'Dancing Script', cursive; /* Применен рукописный шрифт */
+    font-size: 3rem; /* Увеличен размер */
+    color: #ffffff;
+    margin-bottom: 15px;
+    font-weight: 700; /* Увеличен вес */
+    text-shadow:
+        0 0 15px rgba(255, 255, 255, 1),
+        0 0 30px rgba(255, 255, 255, 0.8),
+        0 0 50px rgba(255, 255, 255, 0.6);
+}
+
+.wedding-time {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    color: #ffffff;
+    font-weight: 500;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+}
+
+/* Секция с фотографией пары */
+.couple-section {
+    margin: 40px 0; /* Уменьшен вертикальный отступ */
+    text-align: center;
+}
+
+.photo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 30px; /* Уменьшен отступ */
+}
+
+.couple-photo-frame {
+    position: relative;
+    width: 470px;
+    height: 700px;
+    border-radius: 25px; /* Немного увеличен радиус */
+    overflow: hidden;
+    box-shadow:
+        0 0 30px rgba(255, 255, 255, 0.4),
+        0 0 60px rgba(255, 255, 255, 0.3),
+        0 0 90px rgba(255, 255, 255, 0.2),
+        0 0 120px rgba(255, 255, 255, 0.1); /* Более выраженное свечение */
+    transition: all 0.6s ease;
+    border: 3px solid rgba(255, 255, 255, 0.4); /* Чуть более выраженная белая рамка */
+    background: none; /* Убираем жесткий черный фон */
+    filter: brightness(1.1) contrast(1.1); /* Улучшаем контраст и яркость */
+}
+
+.couple-photo-frame:hover {
+    transform: translateY(-10px) scale(1.01); /* Менее агрессивное увеличение */
+    box-shadow:
+        0 0 40px rgba(255, 255, 255, 0.6),
+        0 0 80px rgba(255, 255, 255, 0.4),
+        0 0 120px rgba(255, 255, 255, 0.3),
+        0 0 160px rgba(255, 255, 255, 0.2); /* Усиленное свечение при наведении */
+    border-color: #ffffff; /* Белая рамка при наведении */
+}
+
+/* Удаляем старые стили для img, так как теперь используются slideshow-photo */
+
+.photo-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.couple-photo-frame:hover .photo-overlay {
+    opacity: 1;
+}
+
+.change-photo-btn {
+    background: rgba(255, 255, 255, 0.9);
+    color: #000;
+    border: 2px solid #ffffff;
+    padding: 15px 30px;
+    border-radius: 30px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.change-photo-btn:hover {
+    background: #ffffff;
+    color: #000;
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(255, 255, 255, 0.4);
+}
+
+/* Эффект размытия движения */
+.motion-blur-effect {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.1) 25%,
+        transparent 50%,
+        rgba(255, 255, 255, 0.1) 75%,
+        transparent 100%);
+    opacity: 0;
+    transition: opacity 0.6s ease;
+    pointer-events: none;
+}
+
+.couple-photo-frame:hover .motion-blur-effect {
+    opacity: 1;
+    animation: motionBlur 2s ease-in-out infinite;
+}
+
+@keyframes motionBlur {
+    0%, 100% { transform: translateX(-100%); }
+    50% { transform: translateX(100%); }
+}
+
+/* Романтическое свечение */
+.romantic-glow {
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    right: -20px;
+    bottom: -20px;
+    border-radius: 35px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0) 70%); /* Мягкое белое свечение */
+    pointer-events: none;
+    animation: romanticGlowPulse 6s infinite ease-in-out alternate; /* Улучшенная анимация */
+    z-index: -1;
+}
+
+.romantic-glow::before,
+.romantic-glow::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 35px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 60%);
+    animation: romanticGlowFade 8s infinite ease-in-out alternate;
+}
+
+.romantic-glow::after {
+    animation-delay: 2s;
+    animation-duration: 9s;
+}
+
+@keyframes romanticGlowPulse {
+    0% { opacity: 0.7; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.03); }
+    100% { opacity: 0.7; transform: scale(1); }
+}
+
+@keyframes romanticGlowFade {
+    0% { opacity: 0; transform: scale(1.05); }
+    50% { opacity: 0.6; transform: scale(1.08); }
+    100% { opacity: 0; transform: scale(1.05); }
+}
+
+.couple-photo-frame:hover .romantic-glow {
+    opacity: 1; /* Полностью показываем свечение при наведении */
+    filter: brightness(1.2); /* Усиление свечения при наведении */
+}
+
+.couple-photo.slideshow-photo {
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out, filter 0.6s ease; /* Добавляем переход для фильтра */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Обеспечивает покрытие всего блока */
+    filter: grayscale(100%) brightness(1.1) contrast(1.1); /* Скорректировано: немного ярче и контрастнее, без блюра */
+}
+
+.couple-photo.slideshow-photo.active {
+    opacity: 1;
+    position: relative;
+}
+
+.couple-photo-frame:hover .couple-photo.slideshow-photo {
+    filter: grayscale(100%) brightness(1.2) contrast(1.2); /* Усиление эффекта при наведении, без блюра */
+}
+
+/* Правила для гостей */
+.rules-section {
+    text-align: center;
+    margin: 40px 0; /* Уменьшен вертикальный отступ */
+}
+
+.rules-btn {
+    background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.2));
+    color: #ffffff;
+    border: 2px solid #ffffff;
+    padding: 18px 40px;
+    border-radius: 30px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    font-family: 'Cormorant Garamond', serif;
+    box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+}
+
+.rules-btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(255, 255, 255, 0.3);
+    background: linear-gradient(45deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.3));
+}
+
+/* Модальное окно */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(10px);
+}
+
+.modal-content {
+    background: linear-gradient(135deg, #000000, #1a1a1a);
+    margin: 5% auto;
+    padding: 50px;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 800px;
+    max-height: 85vh;
+    overflow-y: auto;
+    border: 3px solid #ffffff;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8);
+}
+
+.close {
+    color: #ffffff;
+    float: right;
+    font-size: 2.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    line-height: 1;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+}
+
+.close:hover {
+    color: #cccccc;
+    transform: scale(1.1);
+}
+
+.modal h2 {
+    text-align: center;
+    color: #ffffff;
+    font-family: 'Dancing Script', cursive;
+    font-size: 2.5rem;
+    margin-bottom: 40px;
+    font-weight: 600;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+}
+
+.rules-list {
+    display: grid;
+    gap: 25px;
+}
+
+.rule-item {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 25px;
+    border-radius: 15px;
+    border-left: 5px solid #ffffff;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    backdrop-filter: blur(10px);
+}
+
+.rule-item:hover {
+    transform: translateX(15px);
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 25px rgba(255, 255, 255, 0.2);
+}
+
+.rule-number {
+    background: #ffffff;
+    color: #000000;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+}
+
+.rule-item p {
+    color: #ffffff;
+    line-height: 1.7;
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1.1rem;
+    margin: 0;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+.conclusion {
+    text-align: center;
+    font-style: italic;
+    color: #ffffff;
+    font-size: 1.2rem;
+    margin-top: 30px;
+    font-family: 'Cormorant Garamond', serif;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+}
+
+/* RSVP секция */
+.rsvp-section {
+    text-align: center;
+    margin: 40px 0; /* Уменьшен вертикальный отступ */
+    padding: 50px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.rsvp-section h3 {
+    font-size: 2rem;
+    color: #ffffff;
+    margin-bottom: 40px;
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+}
+
+.rsvp-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.rsvp-btn {
+    padding: 18px 40px;
+    border: 2px solid #ffffff;
+    border-radius: 30px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    font-family: 'Cormorant Garamond', serif;
+    min-width: 180px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    backdrop-filter: blur(10px);
+}
+
+.rsvp-btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(255, 255, 255, 0.3);
+    background: #ffffff;
+    color: #000000;
+}
+
+.rsvp-btn.active {
+    background: #ffffff;
+    color: #000000;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+}
+
+#rsvpMessage {
+    font-size: 1.3rem;
+    margin-top: 25px;
+    color: #ffffff;
+    font-weight: 600;
+    font-family: 'Cormorant Garamond', serif;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+}
+
+/* Форма RSVP */
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #ffffff;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    font-family: 'Libre Baskerville', serif;
+    font-size: 1rem;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #ffffff;
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.form-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.submit-btn, .cancel-btn {
+    padding: 15px 30px;
+    border: 2px solid #ffffff;
+    border-radius: 30px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Cormorant Garamond', serif;
+    min-width: 150px;
+}
+
+.submit-btn {
+    background: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+}
+
+.submit-btn:hover {
+    background: #ffffff;
+    color: #000000;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(255, 255, 255, 0.3);
+}
+
+.cancel-btn {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+}
+
+.cancel-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-3px);
+}
+
+#formMessage {
+    margin-top: 20px;
+    text-align: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    min-height: 25px;
+}
+
+#formMessage.success {
+    color: #4CAF50;
+    text-shadow: 0 0 10px rgba(76, 175, 80, 0.6);
+}
+
+#formMessage.error {
+    color: #f44336;
+    text-shadow: 0 0 10px rgba(244, 67, 54, 0.6);
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .bride-name, .groom-name, .and-text {
+        font-size: 3.2rem; /* Скорректирован размер для мобильных */
+        letter-spacing: 2px;
+    }
+
+    .and-text {
+        font-size: 1.4rem;
+        margin: 0 20px;
+    }
+
+    .crest-photo {
+        width: 280px;
+        height: 280px;
+        border-radius: 40px;
+    }
+
+    .crest-photo::before {
+        top: -10px;
+        left: -10px;
+        right: -10px;
+        bottom: -10px;
+        border-radius: 45px;
+    }
+
+    .crest-photo::after {
+        top: -20px;
+        left: -20px;
+        right: -20px;
+        bottom: -20px;
+        border-radius: 60px;
+    }
+
+    .romantic-quote {
+        font-size: 1.5rem;
+    }
+
+    .couple-photo-frame {
+        width: 330px; /* Адаптирована ширина для мобильных */
+        height: 480px; /* Увеличена высота для мобильных */
+    }
+
+    .modal-content {
+        margin: 10% auto;
+        padding: 30px;
+        width: 95%;
+    }
+
+    .venue-name {
+        font-size: 2.5rem;
+    }
+
+    .rsvp-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .rsvp-btn {
+        width: 220px;
+    }
+
+    .container {
+        padding: 20px;
+    }
+
+    .crest-frame {
+        width: 180px;
+        height: 180px;
+    }
+
+    .initial {
+        font-size: 2.2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 15px;
+    }
+
+    .bride-name, .groom-name , .and-text{
+        font-size: 3.8rem; /* Скорректирован размер для маленьких мобильных */
+        letter-spacing: 1px;
+    }
+
+    .and-text {
+        font-size: 1.2rem;
+        margin: 0 15px;
+    }
+
+    .romantic-quote {
+        font-size: 1.3rem;
+    }
+
+    .couple-photo-frame {
+        width: 260px; /* Адаптирована ширина для маленьких мобильных */
+        height: 385px;
+    }
+
+    .modal-content {
+        padding: 20px;
+    }
+
+    .rules-btn {
+        padding: 15px 30px;
+        font-size: 1rem;
+    }
+
+    .venue-name {
+        font-size: 2rem; /* Скорректирован размер для маленьких мобильных */
+    }
+
+    .crest-frame {
+        width: 150px;
+        height: 150px;
+    }
+
+    .initial {
+        font-size: 2.2rem;
+    }
+
+    .audio-btn {
+        width: 45px !important; /* Уменьшаем ширину */
+        height: 45px !important; /* Уменьшаем высоту */
+        font-size: 18px !important; /* Уменьшаем размер иконки */
+    }
+}

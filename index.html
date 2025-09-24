@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Свадебное приглашение - Бабажан & Гузаль</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Cormorant+Garamond:wght@300;400;500;600;700&family=Libre+Baskerville:wght@400;700&family=Cinzel+Decorative:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="audio-controls">
+      <button id="playPauseBtn" class="audio-btn">🎵</button>
+        <audio id="backgroundMusic" loop preload="auto">
+            <source src="Empire of the Sun – We Are The People (Original Mix).mp3" type="audio/mpeg">
+            Ваш браузер не поддерживает аудио элемент.
+        </audio>
+    </div>
+
+    <!-- Основной контент -->
+    <div class="container">
+      <!-- Фото герба -->
+      <div class="crest-section">
+        <div class="crest-photo">
+          <img src="070d8f16-5871-4ff5-a39a-f514b822eb1b-wm 312312442321312.png" alt="Герб" class="crest-image">
+        </div>
+      </div>
+
+      <!-- Имена молодоженов -->
+      <section class="names-section">
+        <h1 class="bride-name">Babajan</h1>
+        <span class="and-text">&</span>
+        <h1 class="groom-name">Gozal</h1>
+      </section>
+
+      <!-- Романтическая цитата -->
+      <section class="quote-section">
+        <p class="romantic-quote">
+          "Мечта, которую мы бережно хранили, стала нашей судьбой!"
+        </p>
+        <div class="date-info">
+          <span class="date">4 | 10 | 25</span>
+        </div>
+      </section>
+
+      <!-- Информация о свадьбе -->
+      <section class="wedding-info">
+        <div class="venue-info">
+          <h3 class="venue-name">Restaurant Asr</h3>
+          <p class="wedding-time">18:00</p>
+        </div>
+      </section>
+
+      <!-- Секция с фотографией пары -->
+      <section class="couple-section">
+        <div class="photo-container">
+          <div class="couple-photo-frame">
+            <div class="romantic-glow"></div>
+            <img src="photo_2025-09-24_23-18-42.jpg" alt="Фото молодоженов 1" class="couple-photo slideshow-photo active">
+            <img src="photo_2025-09-24_23-24-20.jpg" alt="Фото молодоженов 2" class="couple-photo slideshow-photo">
+            <img src="112322312321312.jpg" alt="Фото молодоженов 3" class="couple-photo slideshow-photo">
+          </div>
+        </div>
+      </section>
+
+      <!-- Кнопка для просмотра инструкций -->
+      <div class="rules-section">
+        <button class="rules-btn" onclick="toggleRules()">
+          Небольшая инструкция к нашему дню
+        </button>
+      </div>
+
+      <!-- Модальное окно с инструкциями -->
+      <div id="rulesModal" class="modal">
+        <div class="modal-content">
+          <span class="close" onclick="toggleRules()">&times;</span>
+          <h2>Небольшая инструкция к нашему дню</h2>
+          <div class="rules-list">
+            <div class="rule-item">
+              <span class="rule-number">1</span>
+              <p>
+                Если вдруг вы не сможете прийти, пожалуйста, дайте нам знать до
+                31 сентября — мы будем очень благодарны.
+              </p>
+            </div>
+            <div class="rule-item">
+              <span class="rule-number">2</span>
+              <p>
+                Настройтесь на веселье и танцы до самого утра — этот праздник мы
+                хотим провести вместе с вами!
+              </p>
+            </div>
+            <div class="rule-item">
+              <span class="rule-number">3</span>
+              <p>
+                Просим вас не утруждать себя большими подарками: для нас важнее
+                ваше присутствие и немного тепла в конвертике.
+              </p>
+            </div>
+            <div class="rule-item">
+              <span class="rule-number">4</span>
+              <p>
+                Нарядитесь так, будто вас пригласили на самый красивый бал —
+                этот вечер будет особенным.
+              </p>
+            </div>
+            <div class="rule-item">
+              <span class="rule-number">5</span>
+              <p>
+                Будьте смелыми и активными в конкурсах — ваши улыбки и энергия
+                сделают наш праздник ещё ярче!
+              </p>
+            </div>
+          </div>
+          <p class="conclusion">
+            С нетерпением ждём встречи и уверены, что этот день станет для всех
+            незабываемым
+          </p>
+        </div>
+      </div>
+
+      <!-- RSVP секция -->
+      <section class="rsvp-section">
+        <h3>Подтвердите присутствие</h3>
+        <div class="rsvp-buttons">
+          <button class="rsvp-btn confirm" onclick="showRSVPForm(true)">
+            Приду
+          </button>
+          <button class="rsvp-btn decline" onclick="showRSVPForm(false)">
+            Не смогу
+          </button>
+        </div>
+        <p id="rsvpMessage"></p>
+      </section>
+
+      <!-- Форма RSVP -->
+      <div id="rsvpFormModal" class="modal">
+        <div class="modal-content">
+          <span class="close" onclick="closeRSVPForm()">&times;</span>
+          <h2 id="rsvpFormTitle">Подтверждение присутствия</h2>
+          <form id="rsvpForm" onsubmit="submitRSVP(event)">
+            <div class="form-group">
+              <label for="firstName">Имя *</label>
+              <input type="text" id="firstName" name="firstName" required>
+            </div>
+            <div class="form-group">
+              <label for="lastName">Фамилия *</label>
+              <input type="text" id="lastName" name="lastName" required>
+            </div>
+            <div class="form-group">
+              <label for="wishes">Пожелания (необязательно)</label>
+              <textarea id="wishes" name="wishes" rows="4" placeholder="Напишите ваши пожелания молодоженам..."></textarea>
+            </div>
+            <input type="hidden" id="rsvpType" name="rsvpType" value="">
+            <div class="form-buttons">
+              <button type="submit" class="submit-btn">Отправить</button>
+              <button type="button" class="cancel-btn" onclick="closeRSVPForm()">Отмена</button>
+            </div>
+          </form>
+          <div id="formMessage"></div>
+        </div>
+      </div>
+
+      <!-- Контактная информация -->
+
+
+    <script src="script.js"></script>
+  </body>
+</html>
