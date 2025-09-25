@@ -407,8 +407,8 @@ setTimeout(() => {
 
 // Управление клавиатурой
 document.addEventListener('keydown', function (event) {
-    // Пробел для воспроизведения/паузы музыки
-    if (event.code === 'Space' && event.target.tagName !== 'INPUT') {
+    // Пробел для воспроизведения/паузы музыки (только если не в поле ввода)
+    if (event.code === 'Space' && event.target.tagName !== 'INPUT' && event.target.tagName !== 'TEXTAREA') {
         event.preventDefault();
         playPauseBtn.click();
     }
@@ -617,8 +617,17 @@ function setupAutoPlayOnInteraction() {
     }
 
     // Слушаем различные события взаимодействия
-    const events = ['click', 'touchstart', 'keydown', 'scroll'];
+    const events = ['click', 'touchstart', 'scroll'];
     events.forEach(event => {
         document.addEventListener(event, tryAutoPlay, { once: true });
     });
+    
+    // Отдельно обрабатываем keydown, исключая поля ввода
+    document.addEventListener('keydown', function(event) {
+        // Игнорируем события в полях ввода
+        if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') {
+            return;
+        }
+        tryAutoPlay();
+    }, { once: true });
 }
