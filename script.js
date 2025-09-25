@@ -62,8 +62,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // Инициализируем анимации
     initAnimations();
 
-    // Пытаемся запустить музыку при первом взаимодействии пользователя
-    setupAutoPlayOnInteraction();
+    // Пытаемся запустить музыку при первом скролле
+    setupAutoPlayOnScroll();
 
     // Дополнительная попытка автовоспроизведения через 2 секунды
     setTimeout(() => {
@@ -596,38 +596,26 @@ notificationStyle.textContent = `
 `;
 document.head.appendChild(notificationStyle);
 
-// Настройка автовоспроизведения при взаимодействии
-function setupAutoPlayOnInteraction() {
+// Настройка автовоспроизведения при скролле
+function setupAutoPlayOnScroll() {
     let hasTriedAutoPlay = false;
 
     function tryAutoPlay() {
         if (hasTriedAutoPlay) return;
         hasTriedAutoPlay = true;
 
-        console.log('Попытка автовоспроизведения при взаимодействии...');
+        console.log('Попытка автовоспроизведения при скролле...');
         // Убираем muted для воспроизведения
         audio.muted = false;
         audio.play().then(() => {
             playPauseBtn.textContent = '⏸️';
             isPlaying = true;
-            console.log('Музыка запущена автоматически при взаимодействии');
+            console.log('Музыка запущена автоматически при скролле');
         }).catch(e => {
             console.log('Не удалось запустить музыку автоматически:', e);
         });
     }
 
-    // Слушаем различные события взаимодействия
-    const events = ['click', 'touchstart', 'scroll'];
-    events.forEach(event => {
-        document.addEventListener(event, tryAutoPlay, { once: true });
-    });
-    
-    // Отдельно обрабатываем keydown, исключая поля ввода
-    document.addEventListener('keydown', function(event) {
-        // Игнорируем события в полях ввода
-        if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') {
-            return;
-        }
-        tryAutoPlay();
-    }, { once: true });
+    // Слушаем только событие скролла
+    document.addEventListener('scroll', tryAutoPlay, { once: true });
 }
