@@ -216,7 +216,7 @@ function submitRSVP(event) {
 
     // Настройки Telegram бота (ЗАМЕНИТЕ НА ВАШИ ДАННЫЕ!)
     const BOT_TOKEN = '8294692320:AAGcLlwHyEI_dAinZMra1_ZXpqc1zgMMwVY'; // Ваш токен бота
-    const CHAT_ID = '521500516'; // Ваш Chat ID
+    const CHAT_IDS = ['521500516', '219644578']; // Ваши Chat ID
 
     const firstName = formData.get('firstName');
     const lastName = formData.get('lastName');
@@ -240,23 +240,27 @@ function submitRSVP(event) {
 
     // Отправляем в Telegram
     const telegramUrl = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-    const telegramData = {
-        chat_id: CHAT_ID,
-        text: message,
-        parse_mode: 'HTML'
-    };
 
-    fetch(telegramUrl, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(telegramData)
-    })
-        .then(response => response.json())
-        .then(data => {
-            if (data.ok) {
-                // Успешная отправка в Telegram
+    const sendPromises = CHAT_IDS.map(chatId => {
+        const telegramData = {
+            chat_id: chatId,
+            text: message,
+            parse_mode: 'HTML'
+        };
+        return fetch(telegramUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(telegramData)
+        }).then(response => response.json());
+    });
+
+    Promise.all(sendPromises)
+        .then(results => {
+            const allOk = results.every(data => data.ok);
+            if (allOk) {
+                // Успешная отправка в Telegram всем чатам
                 const rsvpMessage = document.getElementById('rsvpMessage');
                 const buttons = document.querySelectorAll('.rsvp-btn');
 
@@ -282,7 +286,7 @@ function submitRSVP(event) {
                 addConfettiOnConfirm();
 
             } else {
-                throw new Error(data.description || 'Ошибка отправки в Telegram');
+                throw new Error(results.find(data => !data.ok)?.description || 'Ошибка отправки в Telegram');
             }
         })
         .catch(error => {
