@@ -62,8 +62,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // Инициализируем анимации
     initAnimations();
 
-    // Пытаемся запустить музыку при первом скролле
-    setupAutoPlayOnScroll();
+    // Пытаемся запустить музыку при первом взаимодействии
+    setupAutoPlayOnInteraction();
 
     // Дополнительная попытка автовоспроизведения через 2 секунды
     setTimeout(() => {
@@ -546,27 +546,30 @@ function showMusicNotification() {
         top: 20px;
         left: 50%;
         transform: translateX(-50%);
-        background: rgba(0, 0, 0, 0.9);
+        background: rgba(0, 0, 0, 0.95);
         color: white;
-        padding: 15px 25px;
-        border-radius: 25px;
-        border: 2px solid #ffffff;
+        padding: 20px 30px;
+        border-radius: 30px;
+        border: 3px solid #ffffff;
         font-family: 'Cormorant Garamond', serif;
-        font-size: 1.1rem;
+        font-size: 1.3rem;
+        font-weight: 600;
         z-index: 10000;
-        backdrop-filter: blur(10px);
-        box-shadow: 0 10px 30px rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(15px);
+        box-shadow: 0 15px 40px rgba(255, 255, 255, 0.4);
         animation: slideDown 0.5s ease-out;
+        text-align: center;
+        max-width: 90%;
     `;
-    notification.innerHTML = '🎵 Нажмите в любом месте для воспроизведения музыки';
-
+    notification.innerHTML = '🎵 Нажмите в любом месте или прокрутите страницу для воспроизведения музыки';
+    
     document.body.appendChild(notification);
-
-    // Убираем уведомление через 5 секунд
+    
+    // Убираем уведомление через 8 секунд
     setTimeout(() => {
         notification.style.animation = 'slideUp 0.5s ease-out forwards';
         setTimeout(() => notification.remove(), 500);
-    }, 5000);
+    }, 8000);
 }
 
 // CSS анимации для уведомления
@@ -596,26 +599,35 @@ notificationStyle.textContent = `
 `;
 document.head.appendChild(notificationStyle);
 
-// Настройка автовоспроизведения при скролле
-function setupAutoPlayOnScroll() {
+// Настройка автовоспроизведения при взаимодействии
+function setupAutoPlayOnInteraction() {
     let hasTriedAutoPlay = false;
 
     function tryAutoPlay() {
         if (hasTriedAutoPlay) return;
         hasTriedAutoPlay = true;
 
-        console.log('Попытка автовоспроизведения при скролле...');
+        console.log('Попытка автовоспроизведения при взаимодействии...');
         // Убираем muted для воспроизведения
         audio.muted = false;
         audio.play().then(() => {
             playPauseBtn.textContent = '⏸️';
             isPlaying = true;
-            console.log('Музыка запущена автоматически при скролле');
+            console.log('Музыка запущена автоматически при взаимодействии');
         }).catch(e => {
             console.log('Не удалось запустить музыку автоматически:', e);
         });
     }
 
-    // Слушаем только событие скролла
-    document.addEventListener('scroll', tryAutoPlay, { once: true });
+    // Слушаем различные события взаимодействия (кроме полей ввода)
+    const events = ['click', 'touchstart', 'scroll', 'keydown'];
+    events.forEach(event => {
+        document.addEventListener(event, function(event) {
+            // Игнорируем события в полях ввода
+            if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') {
+                return;
+            }
+            tryAutoPlay();
+        }, { once: true });
+    });
 }
