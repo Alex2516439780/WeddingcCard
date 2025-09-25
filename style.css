@@ -31,7 +31,7 @@ body {
 .audio-controls {
     position: fixed !important;
     top: 30px !important;
-    right: 15px !important; /* Перемещено немного правее */
+    left: 15px !important; /* Перемещено влево */
     z-index: 1000 !important;
     animation: none !important;
     transform: none !important;

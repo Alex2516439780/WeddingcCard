@@ -46,8 +46,6 @@ document.addEventListener('DOMContentLoaded', function () {
             isPlaying = true;
         }).catch(e => {
             console.log('Автовоспроизведение заблокировано браузером:', e);
-            // Показываем уведомление о том, что нужно кликнуть для воспроизведения
-            showMusicNotification();
         });
     });
 
@@ -538,66 +536,7 @@ document.head.appendChild(twinkleStyle);
 // Добавляем эффект мерцания
 setTimeout(addTwinkleEffect, 3000);
 
-// Функция для показа уведомления о музыке
-function showMusicNotification() {
-    const notification = document.createElement('div');
-    notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: rgba(0, 0, 0, 0.95);
-        color: white;
-        padding: 20px 30px;
-        border-radius: 30px;
-        border: 3px solid #ffffff;
-        font-family: 'Cormorant Garamond', serif;
-        font-size: 1.3rem;
-        font-weight: 600;
-        z-index: 10000;
-        backdrop-filter: blur(15px);
-        box-shadow: 0 15px 40px rgba(255, 255, 255, 0.4);
-        animation: slideDown 0.5s ease-out;
-        text-align: center;
-        max-width: 90%;
-    `;
-    notification.innerHTML = '🎵 Нажмите в любом месте или прокрутите страницу для воспроизведения музыки';
-    
-    document.body.appendChild(notification);
-    
-    // Убираем уведомление через 8 секунд
-    setTimeout(() => {
-        notification.style.animation = 'slideUp 0.5s ease-out forwards';
-        setTimeout(() => notification.remove(), 500);
-    }, 8000);
-}
 
-// CSS анимации для уведомления
-const notificationStyle = document.createElement('style');
-notificationStyle.textContent = `
-    @keyframes slideDown {
-        from {
-            opacity: 0;
-            transform: translateX(-50%) translateY(-50px);
-        }
-        to {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-    }
-
-    @keyframes slideUp {
-        from {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-        to {
-            opacity: 0;
-            transform: translateX(-50%) translateY(-50px);
-        }
-    }
-`;
-document.head.appendChild(notificationStyle);
 
 // Настройка автовоспроизведения при взаимодействии
 function setupAutoPlayOnInteraction() {
@@ -622,7 +561,7 @@ function setupAutoPlayOnInteraction() {
     // Слушаем различные события взаимодействия (кроме полей ввода)
     const events = ['click', 'touchstart', 'scroll', 'keydown'];
     events.forEach(event => {
-        document.addEventListener(event, function(event) {
+        document.addEventListener(event, function (event) {
             // Игнорируем события в полях ввода
             if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') {
                 return;
